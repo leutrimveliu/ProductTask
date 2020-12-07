@@ -10,8 +10,9 @@ const productSchema = mongoose.Schema({
     required: [true, "Price required"],
   },
   publishDate: {
-    type: Number,
+    type: Date,
     required: [true, "Card Number required"],
+    default: Date.now,
   },
   stock: {
     type: Number,
