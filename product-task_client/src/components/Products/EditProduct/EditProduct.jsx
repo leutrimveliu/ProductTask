@@ -71,11 +71,8 @@ function EditProduct() {
     try {
       await editProduct(registerData, id);
       setTimeout(() => {
-        history.push("/company/events");
+        history.push("/");
       }, 1000);
-      //   setTimeout(() => {
-      //     history.go("/");
-      //   }, 1000);
     } catch (e) {}
   };
   useEffect(() => {

@@ -6,27 +6,6 @@ var router = express.Router();
 const jwt = require("jsonwebtoken");
 const { validationResult, check } = require("express-validator");
 
-function verifyToken(req, res, next) {
-  // Get auth header value
-  const bearerHeader = req.headers["authorization"];
-  // Check if bearer is undefined
-  if (typeof bearerHeader !== "undefined") {
-    // Split at the space
-    const bearer = bearerHeader.split(" ");
-    // Get token from array
-    const bearerToken = bearer[1];
-    // Parse token
-    const showToken = JSON.parse(bearerToken);
-    // Set the token
-    req.token = showToken.token;
-    // Next middleware
-    next();
-  } else {
-    // Forbidden
-    res.sendStatus(403);
-  }
-}
-
 router.post(
   "/",
 

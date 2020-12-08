@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
-import { useHistory, NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../actions/auth";
 import PropTypes from "prop-types";
@@ -11,7 +11,6 @@ import {
   makeStyles,
   IconButton,
   Drawer,
-  MenuItem,
   useScrollTrigger,
   Slide,
 } from "@material-ui/core";
@@ -69,20 +68,16 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   searchIcon: {
-    // padding: theme.spacing(0, 2),
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    // zIndex: 5
     color: "white",
   },
   IconSearch: {
     color: "white",
-    // maxHeight: '32px',
-    // maxWidth: '32px',
     maxHeight: "36px",
     maxWidth: "36px",
   },
@@ -90,25 +85,18 @@ const useStyles = makeStyles((theme) => ({
     color: "inherit",
   },
   inputInput: {
-    // padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
       width: "20ch",
     },
     minWidth: "220px",
-    // paddingRight: '8px',
     paddingLeft: "12px",
   },
 }));
 
 function HideOnScroll(props) {
   const { children, window } = props;
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
   const trigger = useScrollTrigger({ target: window ? window() : undefined });
 
   return (
@@ -120,27 +108,11 @@ function HideOnScroll(props) {
 
 HideOnScroll.propTypes = {
   children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
 };
 
-const Header = ({ user, setUser, filterChanged, props }) => {
-  const history = useHistory();
-  const {
-    root,
-    header,
-    logo,
-    menuButton,
-    toolbar,
-    drawerContainer,
-    search,
-    searchIcon,
-    inputRoot,
-    inputInput,
-  } = useStyles();
+const Header = ({ user, setUser, props }) => {
+  const { root, header, logo, toolbar, drawerContainer } = useStyles();
 
   const { user: currentUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -174,8 +146,7 @@ const Header = ({ user, setUser, filterChanged, props }) => {
   const displayDesktop = () => {
     return (
       <Toolbar className={toolbar}>
-        <NavLink to="/" className="header__logo" onClick={filterChanged}>
-          {/* <img src={ninjsLogo} alt="ninjs logo" width="45" height="45" /> */}
+        <NavLink to="/" className="header__logo">
           <Typography variant="h6" component="h1" className={logo}>
             StarLabs Task
           </Typography>
@@ -220,9 +191,7 @@ const Header = ({ user, setUser, filterChanged, props }) => {
 
     return (
       <Toolbar className="mobile__responsive">
-        <NavLink to="/" className="header__logo" onClick={filterChanged}>
-          {/* <img src={ninjsLogo} alt="ninjs logo" width="45" height="45" /> */}
-        </NavLink>
+        <NavLink to="/" className="header__logo"></NavLink>
         <IconButton
           {...{
             edge: "start",
@@ -253,13 +222,14 @@ const Header = ({ user, setUser, filterChanged, props }) => {
     return (
       <Nav className="nav__mobile">
         <NavLink to="/" className="header__option">
-          Home
-        </NavLink>
-        <NavLink to="/products" className="header__option">
           Products
         </NavLink>
+
         {currentUser ? (
           <>
+            <NavLink to="/createproduct" className="header__option">
+              Create Product
+            </NavLink>
             <NavLink to="/login" className="header__option" onClick={logOut}>
               LogOut
             </NavLink>

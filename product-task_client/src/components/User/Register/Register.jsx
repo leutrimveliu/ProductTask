@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import { addUser } from "../../../api/register";
 import { useHistory, Link, Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
-// import {Form} from "react-bootstrap";
-// css
-// import "./Register.scss";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -66,7 +63,6 @@ function Copyright() {
   );
 }
 
-// export default function Register() {
 const RegisterForm = () => {
   const history = useHistory();
   const classes = useStyles();

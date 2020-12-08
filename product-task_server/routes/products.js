@@ -88,18 +88,23 @@ router.delete("/:id", verifyToken, function (req, res, next) {
               // Check if this user is the user who created the event
               if (compareUserId == validateProductId) {
                 Products.findByIdAndRemove(req.params.id, (error, data) => {
-                  if (error) return next(error);
-                  res.json("Event Has been deleted!");
+                  if (error) return error;
+                  res
+                    .status(200)
+                    .json({ successMessage: `This product is deleted` });
                 });
               } else {
-                console.log("You are not permitted to delete this event!");
+                console.log("You are not permitted to delete this product!");
+                res.status(500).json({
+                  errorMessage: `You are not permitted to delete this product!`,
+                });
               }
             });
           });
         }
       } catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json({ errorMessage: `Can not found this product` });
       }
     }
   });
@@ -120,9 +125,7 @@ router.put("/:id", verifyToken, validationChecks, function (req, res) {
 
             Products.findById(req.params.id, async function (erro, product) {
               if (erro) return erro;
-
               const validateProductId = await product.user_id;
-
               // Check if this user is the user who created the event or is an admin
               if (compareUserId == validateProductId) {
                 const errors = validationResult(req);
@@ -141,7 +144,9 @@ router.put("/:id", verifyToken, validationChecks, function (req, res) {
                     (error, data) => {
                       // if (error) return next(error);
                       if (error) return error;
-                      res.json("Product Updated successfully!");
+                      res.status(200).json({
+                        successMessage: `This product is updated successfully`,
+                      });
                     }
                   );
                 }

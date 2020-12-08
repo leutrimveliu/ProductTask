@@ -12,7 +12,7 @@ const Footer = () => {
             <ul className="footer__about">
               <strong>ABOUT US</strong>
               <hr />
-              <li>How NinJS Events Works</li>
+              <li>TEST</li>
               <li>Diversity</li>
               <li>Accessibility</li>
               <li>Target Audiences</li>
@@ -32,8 +32,8 @@ const Footer = () => {
             <ul className="footer__support">
               <strong>CONTACT US</strong>
               <hr />
-              <li>Kalabria Street,10000 Pristina, Kosovo</li>
-              <li>info@ninjs-events.com</li>
+              <li>10000 Pristina, Kosovo</li>
+              <li>info@gmail.com</li>
               <li>Mob: +38344223223</li>
               <li>Fax: +38338223223</li>
             </ul>
@@ -43,7 +43,7 @@ const Footer = () => {
 
       <hr />
       <h6 className="footer__copyright">
-        © 2020 NinJS Events, Inc. All rights reserved
+        © 2020 StarLabs, Inc. All rights reserved
       </h6>
     </div>
   );

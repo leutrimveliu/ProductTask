@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -19,10 +19,8 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-// import { deleteEvent } from "../../../api/editEvent";
 import { getProducts, deleteProducts } from "../../../api/products";
-// import { getCategories } from "../../../api/filter";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory, Link, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function descendingComparator(a, b, orderBy) {
@@ -76,6 +74,7 @@ const headCells = [
     disablePadding: false,
     label: "Publish date",
   },
+
   {
     id: "edit",
     numeric: "center",
@@ -263,9 +262,7 @@ export default function CompanyEventsTable() {
     try {
       await deleteProducts(id, deleteuser);
 
-      console.log("Event has been deleted!");
       setTimeout(() => {
-        // history.push("/company/events");
         history.go("/");
       }, 1000);
     } catch (e) {}
@@ -379,6 +376,7 @@ export default function CompanyEventsTable() {
                       <TableCell align="center">
                         {product.publishDate.split("T")[0]}
                       </TableCell>
+
                       <TableCell align="center">
                         <Link to={`/product/${product._id}`}>
                           <IconButton
@@ -390,17 +388,29 @@ export default function CompanyEventsTable() {
                         </Link>
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton
-                          onClick={() => {
-                            if (window.confirm("Delete the event?")) {
-                              handleDeleteSubmit(product._id);
-                            }
-                          }}
-                          className="delete_button"
-                          aria-label="delete"
-                        >
-                          <DeleteIcon className="delete_icon" />
-                        </IconButton>
+                        {currentUser ? (
+                          <IconButton
+                            onClick={() => {
+                              if (window.confirm("Delete the event?")) {
+                                handleDeleteSubmit(product._id);
+                              }
+                            }}
+                            className="delete_button"
+                            aria-label="delete"
+                          >
+                            <DeleteIcon className="delete_icon" />
+                          </IconButton>
+                        ) : (
+                          <IconButton
+                            onClick={() => {
+                              <Redirect to="/" />;
+                            }}
+                            className="delete_button"
+                            aria-label="delete"
+                          >
+                            <DeleteIcon className="delete_icon" />
+                          </IconButton>
+                        )}
                       </TableCell>
                     </TableRow>
                   );

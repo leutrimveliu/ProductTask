@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory, Link } from "react-router-dom";
-// import { getAuth } from "../../api/login";
-// import { login } from "../../api/login";
+import { Redirect, Link } from "react-router-dom";
 import { login } from "../../../actions/auth";
-// css
-// import "./login.scss";
-//
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -67,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
-  const history = useHistory();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -94,11 +88,7 @@ export default function Login() {
     setLoading(true);
 
     dispatch(login(email, password))
-      .then(() => {
-        // window.location.reload();
-        // dispatch(clearMessage())
-        // dispatch(clearMessage)
-      })
+      .then(() => {})
       .catch(() => {
         setLoading(false);
       });

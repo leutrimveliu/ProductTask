@@ -12,6 +12,7 @@ const getProducts = async () => {
   const res = await axios.get(`http://localhost:4000/products`);
   return res.data;
 };
+
 const deleteProducts = async (id, user_id) => {
   axios.defaults.headers.common["Authorization"] =
     "Bearer " + localStorage.getItem("user");

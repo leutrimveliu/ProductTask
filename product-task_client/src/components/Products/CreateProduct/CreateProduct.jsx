@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { addProduct } from "../../../api/products";
-import { useHistory, Link, Redirect } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -116,9 +116,17 @@ function CreateProduct() {
               fullWidth
               label="Product Price"
               name="price"
-              type="decimal"
+              type="number"
               id="price"
-              inputRef={register({ required: true, min: 0.5, max: 1000000 })}
+              inputRef={register({
+                required: true,
+                min: 0.5,
+                max: 1000000,
+                pattern: {
+                  value: /^([0-9]+(\.[0-9]+)?)/i,
+                  message: "Only Numbers",
+                },
+              })}
             />
             <p style={{ color: "red" }}>
               &#8203;
@@ -144,6 +152,10 @@ function CreateProduct() {
                 min: 1,
                 max: 10000,
                 required: true,
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Only Numbers",
+                },
               })}
             />
             <p style={{ color: "red" }}>

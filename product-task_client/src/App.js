@@ -4,7 +4,6 @@ import Register from "./components/User/Register/Register";
 import Login from "./components/User/Login/Login";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import Products from "./components/Products/GetProducts/GetProducts";
 import CreateProduct from "./components/Products/CreateProduct/CreateProduct";
 import Home from "./components/Home/Home";
 import EditProduct from "./components/Products/EditProduct/EditProduct";
