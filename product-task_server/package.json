@@ -16,10 +16,12 @@
     "express-validator": "^6.7.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.4",
+    "mongoose-currency": "^0.2.0",
+    "mongoose-double": "0.0.1",
     "mongoose-unique-validator": "^2.0.3",
     "path": "^0.12.7"
   },
-   "devDependencies": {
+  "devDependencies": {
     "nodemon": "^2.0.6"
   }
 }

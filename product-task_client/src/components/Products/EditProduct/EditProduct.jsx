@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { addProduct } from "../../../api/products";
-import { useHistory, Link, Redirect } from "react-router-dom";
+import { editProduct, getProduct } from "../../../api/products";
+import { useHistory, Link, Redirect, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -36,12 +36,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CreateProduct() {
+function EditProduct() {
   const history = useHistory();
+  let { id } = useParams();
   const classes = useStyles();
   const { user: currentUser } = useSelector((state) => state.auth);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [errMessage, setErrMessage] = useState(false);
+  const [productDetails, setProductDetails] = useState({});
   const [successMessage, setSuccessMessage] = useState(false);
+  const getProductFields = async () => {
+    const response = await getProduct(id);
+    setProductDetails((oldDetails) => ({
+      ...oldDetails,
+      title: response.title,
+      price: response.price,
+      stock: response.stock,
+    }));
+    setShowEditForm(true);
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductDetails({ ...productDetails, [name]: value });
+  };
 
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = async (data, e) => {
@@ -51,18 +68,19 @@ function CreateProduct() {
       stock: data.stock,
       user_id: currentUser.user._id,
     };
-
     try {
-      const response = await addProduct(registerData);
-      setErrMessage(response.errMessage);
-      setSuccessMessage(response.successMessage);
-      e.target.reset();
+      await editProduct(registerData, id);
       setTimeout(() => {
-        history.push("/");
-      }, 2000);
+        history.push("/company/events");
+      }, 1000);
+      //   setTimeout(() => {
+      //     history.go("/");
+      //   }, 1000);
     } catch (e) {}
   };
-  useEffect(() => {}, [currentUser]);
+  useEffect(() => {
+    getProductFields();
+  }, [currentUser]);
   if (!currentUser) {
     return <Redirect to={"/"} />;
   }
@@ -84,13 +102,12 @@ function CreateProduct() {
             component="h1"
             variant="h5"
           >
-            Create a Product
+            Edit Product
           </Typography>
           <br />
           {errMessage && <Alert severity="error">{errMessage}</Alert>}
           {successMessage && <Alert severity="success">{successMessage}</Alert>}
           <br />
-
           <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
             <TextField
               name="title"
@@ -99,6 +116,9 @@ function CreateProduct() {
               label="Product Title"
               type="text"
               id="title"
+              InputLabelProps={{ shrink: true }}
+              value={productDetails.title}
+              onChange={handleChange}
               inputRef={register({ required: true, minLength: 3 })}
             />
             <p style={{ color: "red" }}>
@@ -112,12 +132,15 @@ function CreateProduct() {
             </p>
 
             <TextField
+              InputLabelProps={{ shrink: true }}
               variant="outlined"
               fullWidth
               label="Product Price"
               name="price"
               type="decimal"
               id="price"
+              value={productDetails.price}
+              onChange={handleChange}
               inputRef={register({ required: true, min: 0.5, max: 1000000 })}
             />
             <p style={{ color: "red" }}>
@@ -139,7 +162,10 @@ function CreateProduct() {
               name="stock"
               label="Product stock"
               type="number"
+              InputLabelProps={{ shrink: true }}
               id="stock"
+              onChange={handleChange}
+              value={productDetails.stock}
               inputRef={register({
                 min: 1,
                 max: 10000,
@@ -166,7 +192,7 @@ function CreateProduct() {
               style={{ marginBottom: "15px" }}
               type="submit"
             >
-              Publish product
+              Edit product
             </Button>
           </form>
         </div>
@@ -175,4 +201,4 @@ function CreateProduct() {
   );
 }
 
-export default CreateProduct;
+export default EditProduct;

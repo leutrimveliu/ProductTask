@@ -15,11 +15,14 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
-
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 // import { deleteEvent } from "../../../api/editEvent";
-import { getProducts } from "../../../api/products";
+import { getProducts, deleteProducts } from "../../../api/products";
 // import { getCategories } from "../../../api/filter";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function descendingComparator(a, b, orderBy) {
@@ -51,27 +54,39 @@ function stableSort(array, comparator) {
 const headCells = [
   {
     id: "title",
-    numeric: false,
+    // numeric: "left",
     disablePadding: false,
     label: "Product Title",
   },
   {
     id: "price",
-    numeric: false,
+    numeric: "center",
     disablePadding: false,
     label: "Product Price",
   },
   {
     id: "stock",
-    numeric: false,
+    numeric: "center",
     disablePadding: false,
     label: "Product stock",
   },
   {
     id: "publishDate",
-    numeric: false,
+    numeric: "center",
     disablePadding: false,
     label: "Publish date",
+  },
+  {
+    id: "edit",
+    numeric: "center",
+    disablePadding: false,
+    label: "Edit Product",
+  },
+  {
+    id: "delete",
+    numeric: "center",
+    disablePadding: false,
+    label: "Delete Product",
   },
 ];
 
@@ -103,7 +118,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.numeric ? "center" : "left"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -202,10 +217,10 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 50,
     paddingRight: 50,
   },
-  paper: { margin: "auto", width: "100vh" },
+  paper: { margin: "auto", width: "100%" },
   table: {
     margin: "auto",
-    width: "100vh",
+    width: "100%",
   },
   visuallyHidden: {
     border: 0,
@@ -228,6 +243,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CompanyEventsTable() {
   const classes = useStyles();
+  const history = useHistory();
   const { user: currentUser } = useSelector((state) => state.auth);
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
@@ -238,8 +254,21 @@ export default function CompanyEventsTable() {
 
   const getProductsList = async () => {
     const response = await getProducts();
-
     setProducts(response);
+  };
+  const handleDeleteSubmit = async (id) => {
+    const deleteuser = {
+      user_id: currentUser.user._id,
+    };
+    try {
+      await deleteProducts(id, deleteuser);
+
+      console.log("Event has been deleted!");
+      setTimeout(() => {
+        // history.push("/company/events");
+        history.go("/");
+      }, 1000);
+    } catch (e) {}
   };
 
   useEffect(() => {
@@ -339,20 +368,47 @@ export default function CompanyEventsTable() {
                         id={labelId}
                         scope="row"
                         padding="none"
+                        align="left"
                       >
                         {product.title}
                       </TableCell>
-                      <TableCell align="center">{product.price}€ </TableCell>
+                      <TableCell align="center">
+                        {product.price.toFixed(2)}€{" "}
+                      </TableCell>
                       <TableCell align="center">{product.stock}</TableCell>
-                      <TableCell align="left">
+                      <TableCell align="center">
                         {product.publishDate.split("T")[0]}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Link to={`/product/${product._id}`}>
+                          <IconButton
+                            aria-label="center"
+                            className="edit_button"
+                          >
+                            <EditIcon className="edit_icon" />
+                          </IconButton>
+                        </Link>
+                      </TableCell>
+                      <TableCell align="center">
+                        <IconButton
+                          onClick={() => {
+                            if (window.confirm("Delete the event?")) {
+                              handleDeleteSubmit(product._id);
+                            }
+                          }}
+                          className="delete_button"
+                          aria-label="delete"
+                        >
+                          <DeleteIcon className="delete_icon" />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ emptyRows }}>
-                  <TableCell colSpan={6} />
+                  {/* <TableCell colSpan={6} /> */}
+                  <Divider />
                 </TableRow>
               )}
             </TableBody>
