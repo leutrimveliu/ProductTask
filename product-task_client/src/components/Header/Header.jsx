@@ -14,25 +14,12 @@ import {
   MenuItem,
   useScrollTrigger,
   Slide,
-  Menu,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import { AccountCircle } from "@material-ui/icons";
-import InputBase from "@material-ui/core/InputBase";
+
 import { fade } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
-// import NotificationsIcon from "@material-ui/icons/Notifications";
-// import { Slide, Snackbar } from "@material-ui/core";
-// import Badge from "@material-ui/core/Badge";
 
-// logo
-
-// css
 import "./Header.scss";
-
-// function TransitionUp(props) {
-//   return <Slide {...props} direction="up" />;
-// }
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -154,11 +141,6 @@ const Header = ({ user, setUser, filterChanged, props }) => {
     inputRoot,
     inputInput,
   } = useStyles();
-  const [createEvent, setCreateEvent] = useState(false);
-  const [adminDash, setAdminDash] = useState(false);
-  const [companyDash, setCompanyDash] = useState(false);
-  // const [userInitials, setUserInitials] = useState("");
-  const [searchValue, setSearchValue] = useState(null);
 
   const { user: currentUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -173,19 +155,7 @@ const Header = ({ user, setUser, filterChanged, props }) => {
   });
   const { mobileView, drawerOpen } = state;
 
-  // let fullName;
   useEffect(() => {
-    if (currentUser) {
-      // setCreateEvent(currentUser.role.includes("company", "admin"));
-      // fullName = `${currentUser.user.firstName} ${currentUser.user.lastName}`;
-      // setUserInitials(
-      //   fullName
-      //     .split(" ")
-      //     .map((n) => n[0])
-      //     .join(".")
-      // );
-    }
-
     const setResponsiveness = () => {
       return window.innerWidth < 1200
         ? setState((prevState) => ({ ...prevState, mobileView: true }))
@@ -198,39 +168,8 @@ const Header = ({ user, setUser, filterChanged, props }) => {
   }, [currentUser]);
 
   const logOut = () => {
-    setCreateEvent(false);
-    setAdminDash(false);
-    setCompanyDash(false);
     dispatch(logout());
   };
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleSubmit = async () => {
-    history.push({
-      pathname: "/",
-      search: `?title=${searchValue}`,
-    });
-    filterChanged(`${searchValue}`);
-  };
-
-  // const [open, setOpen] = React.useState(false);
-  // const [transition, setTransition] = React.useState(undefined);
-
-  // const handleClick = (Transition) => () => {
-  //   setTransition(() => Transition);
-  //   setOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
 
   const displayDesktop = () => {
     return (
@@ -244,15 +183,15 @@ const Header = ({ user, setUser, filterChanged, props }) => {
 
         {/* Navigation */}
         <Nav className="header__links">
-          <NavLink to="/products" className="header__option">
+          <NavLink to="/" className="header__option">
             Products
-          </NavLink>
-          <NavLink to="/createproduct" className="header__option">
-            Create Product
           </NavLink>
 
           {currentUser ? (
             <>
+              <NavLink to="/createproduct" className="header__option">
+                Create Product
+              </NavLink>
               <NavLink to="/login" className="header__option" onClick={logOut}>
                 Log Out
               </NavLink>

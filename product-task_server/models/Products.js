@@ -8,6 +8,8 @@ const productSchema = mongoose.Schema({
   price: {
     type: Number,
     required: [true, "Price required"],
+    get: getPrice,
+    set: setPrice,
   },
   publishDate: {
     type: Date,
@@ -19,4 +21,11 @@ const productSchema = mongoose.Schema({
     required: [true, "Stock required"],
   },
 });
+function getPrice(num) {
+  return (num / 100).toFixed(2);
+}
+
+function setPrice(num) {
+  return num * 100;
+}
 module.exports = mongoose.model("Products", productSchema);

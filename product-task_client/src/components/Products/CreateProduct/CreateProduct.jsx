@@ -13,30 +13,19 @@ import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
-  },
-  darkTheme: {
-    backgroundColor: "#424242",
-  },
-  image: {
-    backgroundImage: "url(https://source.unsplash.com/random)",
-    backgroundRepeat: "no-repeat",
-    backgroundColor:
-      theme.palette.type === "light"
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    height: "100%",
+    width: "100%",
+
+    margin: "auto",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   paper: {
     margin: theme.spacing(8, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: "#f48fb1",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -77,15 +66,24 @@ function CreateProduct() {
     return <Redirect to={"/"} />;
   }
   return (
-    <div>
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+    <Grid container component="main" className={classes.root}>
+      <Grid
+        item
+        xs={12}
+        sm={8}
+        md={5}
+        component={Paper}
+        elevation={6}
+        square
+        style={{ width: "100%", marginBottom: 50, marginTop: 60 }}
+      >
         <div className={classes.paper}>
           <Typography
-            style={{ marginBottom: "20px" }}
+            style={{ marginBottom: 20, marginTop: 20 }}
             component="h1"
             variant="h5"
           >
-            Register
+            Create a Product
           </Typography>
           <br />
           {errMessage && <Alert severity="error">{errMessage}</Alert>}
@@ -117,17 +115,20 @@ function CreateProduct() {
               fullWidth
               label="Product Price"
               name="price"
-              type="number"
+              type="decimal"
               id="price"
-              inputRef={register({ required: true, minLength: 3 })}
+              inputRef={register({ required: true, min: 0.5, max: 1000000 })}
             />
             <p style={{ color: "red" }}>
               &#8203;
               {errors.price && errors.price.type === "required" && (
                 <span>This field is required!</span>
               )}
-              {errors.price && errors.price.type === "minLength" && (
-                <span>This field requires minimum length of 3 characters!</span>
+              {errors.price && errors.price.type === "min" && (
+                <span>Price must be at least 0.50 cent!</span>
+              )}
+              {errors.price && errors.price.type === "max" && (
+                <span>Price must be maximum 1000000!</span>
               )}
             </p>
 
@@ -136,17 +137,24 @@ function CreateProduct() {
               fullWidth
               name="stock"
               label="Product stock"
-              type="stock"
+              type="number"
               id="stock"
-              inputRef={register({ required: true, minLength: 2 })}
+              inputRef={register({
+                min: 1,
+                max: 10000,
+                required: true,
+              })}
             />
             <p style={{ color: "red" }}>
               &#8203;
               {errors.stock && errors.stock.type === "required" && (
                 <span>This field is required!</span>
               )}
-              {errors.stock && errors.stock.type === "minLength" && (
-                <span>This field requires minimum length of 6 characters!</span>
+              {errors.stock && errors.stock.type === "min" && (
+                <span>This field requires minimum 1 item in stock!</span>
+              )}
+              {errors.stock && errors.stock.type === "max" && (
+                <span>This field requires maximum 10000 item in stock!</span>
               )}
             </p>
 
@@ -162,7 +170,7 @@ function CreateProduct() {
           </form>
         </div>
       </Grid>
-    </div>
+    </Grid>
   );
 }
 

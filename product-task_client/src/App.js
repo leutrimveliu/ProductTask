@@ -15,7 +15,6 @@ function App() {
         <Switch>
           <Route path="/Register" component={() => <Register />} />
           <Route path="/login" component={() => <Login />} />
-          <Route path="/products" component={() => <Products />} />
           <Route path="/createproduct" component={() => <CreateProduct />} />
           <Route path="/" component={() => <Home />} />
         </Switch>
